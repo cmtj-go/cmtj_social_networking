@@ -12,12 +12,13 @@ const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE_DEV,
   synchronize: true,
   logging: true,
+  entities: [__dirname + '/entities/*']
 })
 
 const main = async () => {
   await AppDataSource.initialize()
   const app = express()
-  app.listen(process.env.PORT, ()=> console.log('Connected to localhost 3000'))
+  app.listen(process.env.SEVER_PORT, ()=> console.log(`Connected to host ${process.env.SEVER_PORT}`))
 }
 
 main().catch(err => console.error(err))
