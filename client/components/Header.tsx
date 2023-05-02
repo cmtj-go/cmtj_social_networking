@@ -1,3 +1,4 @@
+import { log } from "console";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { BiArrowBack } from "react-icons/bi";
