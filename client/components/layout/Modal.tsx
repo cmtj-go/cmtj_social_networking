@@ -107,6 +107,7 @@ const Modal: React.FC<ModalProps> = ({
                     hover:opacity-70
                     transition
                   "
+                  onClick={handleClose}
                 >
                   <AiOutlineClose size={20}/>
                 </button>
