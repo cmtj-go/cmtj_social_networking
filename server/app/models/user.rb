@@ -1,3 +1,7 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :api
+	extend Devise::Models
+	devise :database_authenticatable, :registerable,
+					:recoverable, :rememberable, :trackable, :validatable,
+					:omniauthable
+	include DeviseTokenAuth::Concerns::User
 end

@@ -42,18 +42,31 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_040837) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "user_name"
-    t.string "email", null: false
-    t.datetime "email_verified"
+    t.string "full_name", null: false
+    t.string "user_name", null: false
     t.string "bio"
-    t.string "password"
     t.string "cover_img"
     t.string "profile_img"
     t.jsonb "following_ids", default: [], null: false, array: true
-    t.datetime "deleted_at"
+    t.string "provider", default: "email", null: false
+    t.string "uid", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.boolean "allow_password_change", default: false
+    t.datetime "remember_created_at"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.string "email"
+    t.json "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
   add_foreign_key "comments", "posts", column: "posts_id"
