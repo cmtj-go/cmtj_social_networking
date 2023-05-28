@@ -4,6 +4,9 @@ import { useCallback, useState } from "react";
 import Input from "../Input";
 import Modal from "../layout/Modal";
 import useLoginModal from "@/hooks/useLoginModal";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import api from "@/services/apis/api";
 
 const RegisterModal = () => {
   const loginModal = useLoginModal();
@@ -11,6 +14,7 @@ const RegisterModal = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -27,15 +31,24 @@ const RegisterModal = () => {
   const onSubmit = useCallback(async() => {
     try {
       setIsLoading(true);
-      // Todo register & login
+      await api.post('auth', {
+        email,
+        password,
+        passwordConfirmation,
+        name,
+        username
+      })
+
+      toast.success('Account created.')
 
       registerModal.onClose();
     } catch (error) {
       console.log(error);
+      toast.error('Some thing went wrong!')
     } finally {
       setIsLoading(false);
     }
-  }, [registerModal]);
+  }, [registerModal, email, password, name, username, passwordConfirmation]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
@@ -43,6 +56,9 @@ const RegisterModal = () => {
       <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} disabled={isLoading} />
       <Input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} disabled={isLoading} />
       <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
+      <Input type="password" placeholder="Password confirmation" value={passwordConfirmation}
+        onChange={(e) => setPasswordConfirmation(e.target.value)} disabled={isLoading}
+      />
     </div>
   )
 
