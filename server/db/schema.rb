@@ -42,8 +42,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_040837) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "full_name", null: false
-    t.string "user_name", null: false
+    t.string "name", null: false
+    t.string "username", null: false
     t.string "bio"
     t.string "cover_img"
     t.string "profile_img"

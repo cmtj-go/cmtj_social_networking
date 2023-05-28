@@ -1,8 +1,8 @@
 class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[7.0]
   def change
     create_table(:users) do |t|
-      t.string :full_name, null: false
-      t.string :user_name, unique: true, null: false
+      t.string :name, null: false
+      t.string :username, unique: true, null: false
       t.string :bio
       t.string :cover_img
       t.string :profile_img
@@ -15,7 +15,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[7.0]
       t.string :encrypted_password, :null => false, :default => ""
 
       ## Recoverable
-      t.string   :reset_password_token
+      t.string   :reset_password_tokengem 'jsonapi-serializer'
       t.datetime :reset_password_sent_at
       t.boolean  :allow_password_change, :default => false
 
