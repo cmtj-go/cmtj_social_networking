@@ -4,9 +4,8 @@ import { useCallback, useState } from "react";
 import Input from "../Input";
 import Modal from "../layout/Modal";
 import useLoginModal from "@/hooks/useLoginModal";
-import axios from "axios";
 import { toast } from "react-hot-toast";
-import api from "@/services/apis/api";
+import {api} from "@/services/apis/api";
 
 const RegisterModal = () => {
   const loginModal = useLoginModal();
