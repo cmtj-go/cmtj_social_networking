@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const post = await prisma.post.findUnique({
         where: {
           id: postId,
-        }
+      }
       });
 
       if (post?.userId) {
