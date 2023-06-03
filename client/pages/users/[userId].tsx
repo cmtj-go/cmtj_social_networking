@@ -8,6 +8,8 @@ import Header from "@/components/Header";
 import UserBio from "@/components/users/userBio";
 import UserHero from "@/components/users/userHero";
 
+
+
 const UserView = () => {
   const router = useRouter();
   const { userId } = router.query;
