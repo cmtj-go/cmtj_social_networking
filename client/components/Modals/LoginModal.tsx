@@ -1,10 +1,12 @@
+import { signIn } from "next-auth/react";
+import { useCallback, useState } from "react";
+import { toast } from "react-hot-toast";
+
 import useLoginModal from "@/hooks/useLoginModal";
 import useRegisterModal from "@/hooks/useRegisterModal";
 
-import { useCallback, useState } from "react";
 import Input from "../Input";
 import Modal from "../layout/Modal";
-import { signIn } from "next-auth/react";
 
 const LoginModal = () => {
   const loginModal = useLoginModal();
@@ -14,46 +16,59 @@ const LoginModal = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-
-  const onToggle = useCallback(() => {
-    if(isLoading) {
-      return;
-    }
-
-    loginModal.onClose();
-    registerModal.onOpen();
-  }, [isLoading, loginModal, registerModal]);
-
-  const onSubmit = useCallback(async() => {
+  const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
 
       await signIn('credentials', {
         email,
-        password
-      })
+        password,
+      });
+
+      toast.success('Logged in');
+
       loginModal.onClose();
     } catch (error) {
-      console.log(error);
+      toast.error('Something went wrong');
     } finally {
       setIsLoading(false);
     }
-  }, [loginModal, email, password]);
+  }, [email, password, loginModal]);
+
+  const onToggle = useCallback(() => {
+    loginModal.onClose();
+    registerModal.onOpen();
+  }, [loginModal, registerModal])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading} />
-      <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
+      <Input
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
+        value={email}
+        disabled={isLoading}
+      />
+      <Input
+        placeholder="Password"
+        type="password"
+        onChange={(e) => setPassword(e.target.value)}
+        value={password}
+        disabled={isLoading}
+      />
     </div>
   )
 
   const footerContent = (
     <div className="text-neutral-400 text-center mt-4">
-      <p>
-        No account? &nbsp;
-        <span className="text-white cursor-pointer hover:underline" onClick={onToggle}>
-          Create one!
-        </span>
+      <p>First time using Twitter?
+        <span
+          onClick={onToggle}
+          className="
+            text-white
+            cursor-pointer
+            hover:underline
+          "
+          > Create an account</span>
       </p>
     </div>
   )
