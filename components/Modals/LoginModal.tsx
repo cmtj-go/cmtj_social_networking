@@ -15,19 +15,24 @@ const LoginModal = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
 
-      await signIn('credentials', {
+      const response = await signIn('credentials', {
         email,
         password,
+        redirect: false,
       });
 
-      toast.success('Logged in');
-
-      loginModal.onClose();
+      if (response?.error) {
+        setError('Username or password is incorrect');
+      } else {
+        toast.success('Logged in');
+        loginModal.onClose();
+      }
     } catch (error) {
       toast.error('Something went wrong');
     } finally {
@@ -55,6 +60,7 @@ const LoginModal = () => {
         value={password}
         disabled={isLoading}
       />
+      {error && <p className="text-red-500">{error}</p>}
     </div>
   )
 

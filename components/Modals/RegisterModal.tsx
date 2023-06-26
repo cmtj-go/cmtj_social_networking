@@ -43,6 +43,11 @@ const RegisterModal = () => {
       if (!email) {
         errors.email = 'Email is required.';
       }
+
+      if (!/\S+@\S+\.\S+/.test(email)) {
+        errors.email = 'Email is not in correct format.';
+      }
+
       if (!name) {
         errors.name = 'Name is required.';
       }
@@ -81,13 +86,17 @@ const RegisterModal = () => {
       });
 
       registerModal.onClose();
-    } catch (error) {
-      console.log(error);
-      toast.error('Some thing went wrong!')
+    } catch (error: any) {
+      if (error.response && error.response.data && error.response.data.error) {
+        Object.assign(errors, error.response.data.error);
+      } else {
+        console.log(error);
+        toast.error('Something went wrong!');
+      }
     } finally {
       setIsLoading(false);
     }
-  }, [registerModal, email, password, name, username, passwordConfirmation]);
+  }, [registerModal, email, password, name, username, passwordConfirmation, errors]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">

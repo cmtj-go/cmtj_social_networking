@@ -8,23 +8,38 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).end();
   }
 
-  try {
-    const { email, username, name, password } = req.body;
+  const { email, username, name, password } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+  const emailExists = await prisma.user.findFirst({
+    where: {
+      email: email,
+    },
+  });
 
-    const user = await prisma.user.create({
-      data: {
-        email,
-        username,
-        name,
-        hashedPassword,
-      }
-    });
+  const usernameExists = await prisma.user.findFirst({
+    where: {
+      username: username,
+    },
+  });
 
-    return res.status(200).json(user);
-  } catch (error) {
-    console.log(error);
-    return res.status(400).end();
+  if (emailExists) {
+    return res.status(400).json({ error: {email: 'Email already exists'} });
   }
+
+  if (usernameExists) {
+    return res.status(400).json({ error: {username: 'Username already exists'} });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 12);
+
+  const user = await prisma.user.create({
+    data: {
+      email,
+      username,
+      name,
+      hashedPassword,
+    }
+  });
+
+  return res.status(200).json(user);
 }
